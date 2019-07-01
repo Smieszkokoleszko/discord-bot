@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  bot:
+    volumes:
+      - ./src:/usr/armaforces_bot/src
+    entrypoint: ["pm2-dev", "start", "./src/index.ts"]
