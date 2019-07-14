@@ -7,6 +7,7 @@ const config: IConfig = {
     logs_channel: process.env.LOGS_CHANNEL,
     messages_prefix: process.env.PREFIX,
     watch_channel: process.env.WATCH_CHANNEL,
+    watch_category_id: process.env.WATCH_CATEGORY_ID,
 };
 
 console.log({ ...config, discord_token: config.discord_token.substr(0, 5) });

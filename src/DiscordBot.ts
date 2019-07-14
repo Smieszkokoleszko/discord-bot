@@ -53,7 +53,8 @@ export class DiscordBot {
             const message = reaction.message;
             const channel = message.channel;
             if (!(channel instanceof TextChannel)) return;
-            if (channel.name !== this.config.watch_channel || user.bot) return;
+            if (user.bot) return;
+            if (channel.name !== this.config.watch_channel && channel.parentID !== this.config.watch_category_id) return;
 
             console.log('new #zapisy reaction', {
                 text: message.content,
