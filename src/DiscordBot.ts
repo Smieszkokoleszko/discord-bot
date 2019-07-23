@@ -98,6 +98,7 @@ export class DiscordBot {
             const channel = message.channel;
             if (!(channel instanceof TextChannel)) return;
             if (channel.name !== this.config.watch_channel || user.bot) return;
+            if (channel.id === '600089051445461012') return;
 
             console.log('removed #zapisy reaction', {
                 text: message.content,
