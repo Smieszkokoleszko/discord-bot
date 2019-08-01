@@ -1,7 +1,7 @@
 import { Client, RichEmbed, Message, MessageReaction, ChannelData, TextChannel, Emoji, ReactionEmoji } from 'discord.js';
 import { IConfig } from './IConfig';
 import * as steamUtils from './steam/utils';
-import steamToRichEmbed from './steam/richEmbed';
+import richEmbed from './steam/richEmbed';
 
 export class DiscordBot {
     private client: Client;
@@ -30,8 +30,8 @@ export class DiscordBot {
             if (message.content.indexOf(this.config.messages_prefix) !== 0) {
                 await this.handleNormalMessage(message);
             } else {
-                await this.handleCommandMessage(message)
-            };
+                await this.handleCommandMessage(message);
+            }
         });
 
         this.handleReactionAdd();
@@ -41,23 +41,23 @@ export class DiscordBot {
     }
 
     protected async handleNormalMessage(message: Message) {
-        const steamMatches = steamUtils.parseSteamUrls(message.content)
+        const steamMatches = steamUtils.parseSteamUrls(message.content);
 
         // message has some Steam WS links in it
         if (steamMatches || !!steamMatches.length) {
-            const ids = steamMatches.map(match => steamUtils.parseSteamId(match)).filter(id => id)
+            const ids = steamMatches.map(match => steamUtils.parseSteamId(match)).filter(id => id);
 
             // No ids in links
             if (!ids || !ids.length) return;
 
             const uniqueIds = Array.from(new Set(ids));
 
-            let items = await steamUtils.getWorkshopItems(uniqueIds);
+            const items = await steamUtils.getWorkshopItems(uniqueIds);
 
             items
-                .filter((workshopItem) => workshopItem)
-                .forEach(async item => {
-                    await message.channel.send(steamToRichEmbed(item));
+                .filter(workshopItem => workshopItem)
+                .forEach(async (item) => {
+                    await message.channel.send(richEmbed(item));
                 })
             ;
                 // .then(workshopItems => {
@@ -67,13 +67,13 @@ export class DiscordBot {
                 // })
                 // });
         }
-    };
+    }
 
     protected async handleCommandMessage(message: Message) {
         const args = message.content.slice(this.config.messages_prefix.length)
                 .trim()
                 .split(/ +/g)
-            ;
+        ;
         const command = args.shift().toLowerCase();
 
         // Let's go with a few common example commands! Feel free to delete or change those.

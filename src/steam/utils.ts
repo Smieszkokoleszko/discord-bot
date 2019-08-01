@@ -1,23 +1,24 @@
 import Url from 'url';
 import SteamWorkshop, { FileDetails } from 'steam-workshop';
-const steamWorkshop = new SteamWorkshop()
+const steamWorkshop = new SteamWorkshop();
 
-const steamWorkshopUrlMatch = /https?:\/\/steamcommunity.com\/sharedfiles\/filedetails\/?\d*\/?\??[^\s]*/ig
+const steamWorkshopUrlMatch = /https?:\/\/steamcommunity.com\/sharedfiles\/filedetails\/?\d*\/?\??[^\s]*/ig;
 
 export function parseSteamUrls(text: string) {
-  const matches = text.match(steamWorkshopUrlMatch)
+    const matches = text.match(steamWorkshopUrlMatch);
 
-  if (matches && matches.length > 0) {
-    return matches;
-  }
+    if (matches && matches.length > 0) {
+        return matches;
+    }
 
-  return [];
+    return [];
 }
 
-export function parseSteamId (text: string) {
+export function parseSteamId(text: string) {
     const url = Url.parse(text, true);
 
     if (url.query.id) {
+        // tslint:disable-next-line: radix
         return parseInt(url.query.id as string);
     }
 
@@ -29,14 +30,14 @@ export function parseSteamId (text: string) {
     return undefined;
 }
 
-export function getWorkshopItems(ids: number|number[]): Promise<Array<FileDetails>> {
+export function getWorkshopItems(ids: number|number[]): Promise<FileDetails[]> {
     return new Promise((resolve, reject) => {
-      steamWorkshop.getPublishedFileDetails(ids, (err, files) => {
-        if (err) {
-          return reject(err);
-        }
+        steamWorkshop.getPublishedFileDetails(ids, (err, files) => {
+            if (err) {
+                return reject(err);
+            }
 
-        return resolve(files);
-      })
-    })
+            return resolve(files);
+        });
+    });
 }
