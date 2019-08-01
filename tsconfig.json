@@ -9,7 +9,8 @@
       "allowJs": false,
       "noImplicitAny": true,
       "alwaysStrict": true,
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      "typeRoots": ["./typings"]
     },
     "lib": [
       "dom",

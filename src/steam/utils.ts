@@ -1,5 +1,6 @@
-import Url from 'url';
-import SteamWorkshop, { FileDetails } from 'steam-workshop';
+import * as Url from 'url';
+import { FileDetails } from 'steam-workshop';
+const SteamWorkshop = require('steam-workshop');
 const steamWorkshop = new SteamWorkshop();
 
 const steamWorkshopUrlMatch = /https?:\/\/steamcommunity.com\/sharedfiles\/filedetails\/?\d*\/?\??[^\s]*/ig;

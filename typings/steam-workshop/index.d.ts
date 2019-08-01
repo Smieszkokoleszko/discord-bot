@@ -26,4 +26,5 @@ declare module 'steam-workshop' {
         constructor();
         getPublishedFileDetails(ids: number|number[], cb: publishedFileDetailsCallback): void
     }
+
 }
