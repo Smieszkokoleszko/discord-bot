@@ -1,5 +1,7 @@
 import { Client, RichEmbed, Message, MessageReaction, ChannelData, TextChannel, Emoji, ReactionEmoji } from 'discord.js';
 import { IConfig } from './IConfig';
+import * as steamUtils from './steam/utils';
+import steamToRichEmbed from './steam/richEmbed';
 
 export class DiscordBot {
     private client: Client;
@@ -24,28 +26,63 @@ export class DiscordBot {
 
         // Messages handler
         client.on('message', async (message) => {
-            if (message.author.bot) return;
-            if (message.content.indexOf(this.config.messages_prefix) !== 0) return;
-
-            const args = message.content.slice(this.config.messages_prefix.length)
-                .trim()
-                .split(/ +/g)
-            ;
-            const command = args.shift().toLowerCase();
-
-            // Let's go with a few common example commands! Feel free to delete or change those.
-
-            if (command === 'ping') {
-                const m = await message.channel.send('Ping?') as Message;
-                // tslint:disable-next-line: max-line-length
-                m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
-            }
+            if (message.author.bot && message.author.id !== '598928706165276729') return;
+            if (message.content.indexOf(this.config.messages_prefix) !== 0) {
+                await this.handleNormalMessage(message);
+            } else {
+                await this.handleCommandMessage(message)
+            };
         });
 
         this.handleReactionAdd();
         this.handleReactionRemoved();
 
         client.login(this.config.discord_token);
+    }
+
+    protected async handleNormalMessage(message: Message) {
+        const steamMatches = steamUtils.parseSteamUrls(message.content)
+
+        // message has some Steam WS links in it
+        if (steamMatches || !!steamMatches.length) {
+            const ids = steamMatches.map(match => steamUtils.parseSteamId(match)).filter(id => id)
+
+            // No ids in links
+            if (!ids || !ids.length) return;
+
+            const uniqueIds = Array.from(new Set(ids));
+
+            let items = await steamUtils.getWorkshopItems(uniqueIds);
+
+            items
+                .filter((workshopItem) => workshopItem)
+                .forEach(async item => {
+                    await message.channel.send(steamToRichEmbed(item));
+                })
+            ;
+                // .then(workshopItems => {
+                // workshopItems.map(item => {
+                //     const embed = richEmbed.workshopItem(item)
+                //     message.channel.send(embed)
+                // })
+                // });
+        }
+    };
+
+    protected async handleCommandMessage(message: Message) {
+        const args = message.content.slice(this.config.messages_prefix.length)
+                .trim()
+                .split(/ +/g)
+            ;
+        const command = args.shift().toLowerCase();
+
+        // Let's go with a few common example commands! Feel free to delete or change those.
+
+        if (command === 'ping') {
+            const m = await message.channel.send('Ping?') as Message;
+            // tslint:disable-next-line: max-line-length
+            m.edit(`Pong! Latency is ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(this.client.ping)}ms`);
+        }
     }
 
     protected handleReactionAdd() {
