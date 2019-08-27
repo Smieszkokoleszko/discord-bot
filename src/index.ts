@@ -2,7 +2,7 @@ import { DiscordBot } from './DiscordBot';
 import { IConfig } from './IConfig';
 import * as dotenv from 'dotenv';
 
-let result = dotenv.config({ path: `${__dirname}/../.env` });
+const result = dotenv.config({ path: `${__dirname}/../.env` });
 
 const config: IConfig = {
     default_status: process.env.DEFAULT_STATUS,
