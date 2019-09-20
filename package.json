@@ -16,7 +16,7 @@
     "filesize": "^4.2.0",
     "moment": "^2.24.0",
     "steam-workshop": "0.0.2",
-    "tslint-config-airbnb": "^5.11.1"
+    "tslint-config-airbnb": "^5.11.2"
   },
   "devDependencies": {
     "@types/node": "^12.7.5",
