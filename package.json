@@ -14,7 +14,7 @@
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "filesize": "^4.2.1",
-    "moment": "^2.25.3",
+    "moment": "^2.26.0",
     "steam-workshop": "0.0.2",
     "tslint-config-airbnb": "^5.11.2"
   },
