@@ -15,7 +15,7 @@
     "dotenv": "^8.2.0",
     "filesize": "^4.2.1",
     "moment": "^2.27.0",
-    "steam-workshop": "0.0.2",
+    "steam-workshop": "0.0.5",
     "tslint-config-airbnb": "^5.11.2"
   },
   "devDependencies": {
